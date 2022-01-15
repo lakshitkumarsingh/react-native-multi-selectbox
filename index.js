@@ -1,20 +1,20 @@
-import React, { useState, memo, useMemo } from 'react'
-import { isEmpty, find } from 'lodash'
-import { View, FlatList, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native'
-import Colors from './src/constants/Colors'
-import Icon from './src/components/Icon'
-import Toggle from './src/components/Toggle'
+import React, { useState, memo, useMemo } from 'react';
+import { isEmpty, find } from 'lodash';
+import { View, FlatList, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import Colors from './src/constants/Colors';
+import Icon from './src/components/Icon';
+import Toggle from './src/components/Toggle';
 
-const hitSlop = { top: 14, bottom: 14, left: 14, right: 14 }
+const hitSlop = { top: 14, bottom: 14, left: 14, right: 14 };
 
-const kOptionsHeight = { width: '100%', maxHeight: 180 }
+const kOptionsHeight = { width: '100%', maxHeight: 180 };
 
 const kOptionListViewStyle = {
   width: '100%',
   alignItems: 'center',
   paddingVertical: 4,
-}
-const renderItemStyle = { flexShrink: 1 }
+};
+const renderItemStyle = { flexShrink: 1 };
 function SelectBox({
   labelStyle,
   containerStyle,
@@ -30,21 +30,21 @@ function SelectBox({
   listEmptyText = 'No results found',
   ...props
 }) {
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState('');
 
-  const [showOptions, setShowOptions] = useState(false)
+  const [showOptions, setShowOptions] = useState(false);
 
   function renderLabel(item) {
     const kOptionsLabelStyle = {
       fontSize: 17,
       color: 'rgba(60, 60, 67, 0.6)',
       ...optionsLabelStyle,
-    }
-    return <Text style={kOptionsLabelStyle}>{item}</Text>
+    };
+    return <Text style={kOptionsLabelStyle}>{item}</Text>;
   }
 
   function renderItem({ item }) {
-    const { isMulti, onChange, onMultiSelect, selectedValues } = props
+    const { isMulti, onChange, onMultiSelect, selectedValues } = props;
     const kOptionContainerStyle = {
       borderColor: '#dadada',
       borderBottomWidth: 1,
@@ -56,7 +56,7 @@ function SelectBox({
       paddingRight: 10,
       justifyContent: 'space-between',
       ...optionContainerStyle,
-    }
+    };
     return (
       <View style={kOptionContainerStyle}>
         {isMulti ? (
@@ -64,11 +64,7 @@ function SelectBox({
             <TouchableOpacity hitSlop={hitSlop} style={renderItemStyle} onPress={onPressMultiItem()}>
               {renderLabel(item.item)}
             </TouchableOpacity>
-            <Toggle
-              iconColor={toggleIconColor}
-              checked={selectedValues.some(i => item.id === i.id)}
-              onTouch={onPressMultiItem()}
-            />
+            <Toggle iconColor={toggleIconColor} checked={selectedValues.some((i) => item.id === i.id)} onTouch={onPressMultiItem()} />
           </>
         ) : (
           <>
@@ -79,23 +75,23 @@ function SelectBox({
           </>
         )}
       </View>
-    )
+    );
 
     function onPressMultiItem() {
-      return (e) => (onMultiSelect ? onMultiSelect(item) : null)
+      return (e) => (onMultiSelect ? onMultiSelect(item) : null);
     }
 
     function onPressItem() {
       return (e) => {
-        setShowOptions(false)
-        return onChange ? onChange(item) : null
-      }
+        setShowOptions(false);
+        return onChange ? onChange(item) : null;
+      };
     }
   }
 
   function renderGroupItem({ item }) {
-    const { onTapClose, options } = props
-    const label = find(options, (o) => o.id === item.id)
+    const { onTapClose, options } = props;
+    const label = find(options, (o) => o.id === item.id);
     const kMultiOptionContainerStyle = {
       flexDirection: 'row',
       borderRadius: 20,
@@ -108,12 +104,12 @@ function SelectBox({
       backgroundColor: Colors.primary,
       flexGrow: 1,
       ...multiOptionContainerStyle,
-    }
+    };
     const kMultiOptionsLabelStyle = {
       fontSize: 10,
       color: '#fff',
       ...multiOptionsLabelStyle,
-    }
+    };
     return (
       <View style={kMultiOptionContainerStyle}>
         <Text style={kMultiOptionsLabelStyle}>{label.item}</Text>
@@ -121,10 +117,10 @@ function SelectBox({
           <Icon name="closeCircle" fill="#fff" width={21} height={21} />
         </TouchableOpacity>
       </View>
-    )
+    );
 
     function onPressItem() {
-      return (e) => (onTapClose ? onTapClose(item) : null)
+      return (e) => (onTapClose ? onTapClose(item) : null);
     }
   }
   const {
@@ -143,27 +139,23 @@ function SelectBox({
     searchInputProps,
     multiSelectInputFieldProps,
     listOptionProps = {},
-  } = props
+  } = props;
   const filteredSuggestions = useMemo(
     () => options.filter((suggestion) => suggestion.item.toLowerCase().indexOf(inputValue.toLowerCase()) > -1),
     [inputValue, options]
-  )
+  );
 
   function multiListEmptyComponent() {
     const kMultiListEmptyLabelStyle = {
       fontSize: 17,
       color: 'rgba(60, 60, 67, 0.3)',
       ...multiListEmptyLabelStyle,
-    }
+    };
     return (
-      <TouchableOpacity
-        width="100%"
-        style={{ flexGrow: 1, width: '100%' }}
-        hitSlop={hitSlop}
-        onPress={onPressShowOptions()}>
+      <TouchableOpacity width="100%" style={{ flexGrow: 1, width: '100%' }} hitSlop={hitSlop} onPress={onPressShowOptions()}>
         <Text style={kMultiListEmptyLabelStyle}>{inputPlaceholder}</Text>
       </TouchableOpacity>
-    )
+    );
   }
 
   function optionListEmpty() {
@@ -171,19 +163,19 @@ function SelectBox({
       fontSize: 17,
       color: 'rgba(60, 60, 67, 0.6)',
       ...listEmptyLabelStyle,
-    }
+    };
     return (
       <View style={kOptionListViewStyle}>
         <Text style={kListEmptyLabelStyle}>{listEmptyText}</Text>
       </View>
-    )
+    );
   }
   const kLabelStyle = {
     fontSize: 12,
     color: 'rgba(60, 60, 67, 0.6)',
     paddingBottom: 4,
     ...labelStyle,
-  }
+  };
 
   const kContainerStyle = {
     flexDirection: 'row',
@@ -194,14 +186,15 @@ function SelectBox({
     paddingRight: 20,
     paddingBottom: 8,
     ...containerStyle,
-  }
+  };
 
   return (
     <>
       <View
         style={{
           width,
-        }}>
+        }}
+      >
         <Text style={kLabelStyle}>{label}</Text>
         <View style={kContainerStyle}>
           <View style={{ paddingRight: 20, flexGrow: 1 }}>
@@ -210,6 +203,7 @@ function SelectBox({
                 data={selectedValues}
                 extraData={{ inputValue, showOptions }}
                 keyExtractor={keyExtractor()}
+                listKey={keyExtractor()}
                 renderItem={renderGroupItem}
                 horizontal={true}
                 ListEmptyComponent={multiListEmptyComponent}
@@ -231,6 +225,7 @@ function SelectBox({
             data={filteredSuggestions || options}
             extraData={options}
             keyExtractor={keyExtractor()}
+            listKey={keyExtractor()}
             renderItem={renderItem}
             numColumns={1}
             horizontal={false}
@@ -245,10 +240,10 @@ function SelectBox({
         )}
       </View>
     </>
-  )
+  );
 
   function keyExtractor() {
-    return (o) => `${o.id}-${Math.random()}`
+    return (o) => `${o.id}-${Math.random()}`;
   }
 
   function kSelectedItemStyle() {
@@ -256,7 +251,7 @@ function SelectBox({
       fontSize: 17,
       color: isEmpty(value.item) ? 'rgba(60, 60, 67, 0.3)' : '#000',
       ...selectedItemStyle,
-    }
+    };
   }
 
   function HeaderComponent() {
@@ -269,7 +264,7 @@ function SelectBox({
       paddingRight: 18,
       justifyContent: 'space-between',
       ...inputFilterContainerStyle,
-    }
+    };
     const kInputFilterStyle = {
       paddingVertical: 14,
       paddingRight: 8,
@@ -277,7 +272,7 @@ function SelectBox({
       fontSize: 12,
       flexGrow: 1,
       ...inputFilterStyle,
-    }
+    };
     return (
       <>
         {!hideInputFilter && (
@@ -295,15 +290,15 @@ function SelectBox({
         )}
         <ScrollView keyboardShouldPersistTaps="always" />
       </>
-    )
+    );
 
     function onChangeText() {
-      return (value) => setInputValue(value)
+      return (value) => setInputValue(value);
     }
   }
 
   function onPressShowOptions() {
-    return () => setShowOptions(!showOptions)
+    return () => setShowOptions(!showOptions);
   }
 }
 
@@ -391,6 +386,6 @@ SelectBox.defaultProps = {
       id: 'BOU',
     },
   ],
-}
+};
 
-export default memo(SelectBox)
+export default memo(SelectBox);
